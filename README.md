@@ -50,7 +50,6 @@ Abrir `http://localhost:5173`. Vite envía `/api` al backend en el puerto 8080.
 | Vendedor | vendedor@huertohogar.cl | Vendedor123! |
 | Cliente | Crear desde «Crear cuenta» | Contraseña definida al registrarse |
 
-Cambiar las contraseñas y el secreto JWT antes de cualquier uso fuera de la demostración académica.
 
 ## Roles
 
@@ -58,15 +57,15 @@ Cambiar las contraseñas y el secreto JWT antes de cualquier uso fuera de la dem
 - **VENDEDOR:** consulta catálogo, detalle de productos, lista de boletas y detalle de boletas. No modifica datos.
 - **CLIENTE:** accede a la tienda, carrito y checkout.
 
-Los permisos se validan en Spring Security. Ocultar una opción del menú no es la única protección.
+Los permisos se validan en Spring Security.
 
 ## Validaciones implementadas
 
 - Nombre de usuario y producto: letras Unicode y espacios; rechaza `123` y `Juan123`.
 - Correo: formato de dirección con usuario, dominio y extensión; rechaza `aaaaa@.gmail.com`.
 - Precio: entero mayor que cero.
-- Stock: entero igual o mayor que cero. Un stock de 20 es válido.
-- Carrito: máximo 20 unidades por producto y nunca más que el stock real.
+- Stock: entero igual o mayor que cero.
+- Carrito: nunca más que el stock real.
 - Compra: el backend vuelve a validar cantidad y stock dentro de una transacción con bloqueo de fila.
 - Pago rechazado: registra la boleta como rechazada y no descuenta inventario.
 
@@ -105,6 +104,3 @@ El modelo conserva las cinco tablas propuestas en el Anexo 1: USUARIO, BOLETA, D
 El Anexo 2 y el Anexo 3 contienen ejemplos de API para Pokémon. Para mantener el dominio del proyecto HuertoHogar, sus operaciones/versionado/roles se adaptaron a productos, categorías y boletas; no se consulta PokeAPI.
 
 
-## Documentos de entrega
-
-En `docs/` están ERS V3, Manual de Usuario, Documentación de APIs (DOCX y XLSX) y APIs e Integración. Los marcadores `CAPTURA REAL PENDIENTE` de los documentos deben reemplazarse por pantallazos del sistema ejecutándose en el computador antes de entregar.
