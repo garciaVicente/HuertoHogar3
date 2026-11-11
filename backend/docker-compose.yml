@@ -1,0 +1,21 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: huertohogar-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: huertohogar
+      MYSQL_USER: huerto
+      MYSQL_PASSWORD: huerto123
+      MYSQL_ROOT_PASSWORD: root123
+    ports:
+      - "3307:3306"
+    volumes:
+      - huertohogar_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-proot123"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+volumes:
+  huertohogar_data:

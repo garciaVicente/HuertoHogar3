@@ -1,0 +1,14 @@
+digraph ER {
+  graph [rankdir=LR, bgcolor="white", pad="0.25", nodesep="0.55", ranksep="0.8", fontname="Arial", label="Modelo relacional HuertoHogar", labelloc=t, fontsize=20];
+  node [shape=record, style="rounded,filled", fillcolor="#F4F8F4", color="#365B45", fontname="Arial", fontsize=10, margin="0.12,0.08"];
+  edge [color="#567B63", fontname="Arial", fontsize=9, arrowsize=0.8];
+  USUARIO [label="{USUARIO|PK id|nombre|email UNIQUE|password_hash|rol}"];
+  BOLETA [label="{BOLETA|PK id|numero UNIQUE|fecha|total|estado|FK usuario_id|direccion_entrega|comuna|region|metodo_entrega}"];
+  DETALLE [label="{DETALLE_BOLETA|PK id|FK boleta_id|FK producto_id|nombre_producto|cantidad (1..20)|precio_unitario|subtotal}"];
+  PRODUCTO [label="{PRODUCTO|PK id|nombre|descripcion|precio|stock minimo 0|imagen|descuento|FK categoria_id}"];
+  CATEGORIA [label="{CATEGORIA|PK id|nombre UNIQUE}"];
+  USUARIO -> BOLETA [label="1 a N"];
+  BOLETA -> DETALLE [label="1 a N"];
+  PRODUCTO -> DETALLE [label="1 a N"];
+  CATEGORIA -> PRODUCTO [label="1 a N"];
+}

@@ -1,0 +1,12 @@
+digraph Architecture {
+ graph [rankdir=LR, bgcolor="white", pad="0.3", nodesep="0.6", ranksep="0.8", fontname="Arial", label="Arquitectura de integración", labelloc=t, fontsize=20];
+ node [shape=box, style="rounded,filled", fontname="Arial", fontsize=11, color="#365B45", fillcolor="#F4F8F4", margin="0.18,0.12"];
+ edge [color="#567B63", fontname="Arial", fontsize=9, arrowsize=0.8];
+ browser [label="Navegador\nReact + Vite + Bootstrap"];
+ api [label="API REST\nSpring Boot\n/api/v1 · /api/v2"];
+ security [label="Spring Security\nJWT · ADMIN / VENDEDOR / CLIENTE"];
+ db [shape=cylinder, label="MySQL 8\n5 tablas relacionales", fillcolor="#EAF2FA", color="#466A91"];
+ browser -> api [label="fetch + Bearer JWT"];
+ api -> security [label="autenticación / autorización"];
+ security -> db [label="JDBC + transacciones"];
+}
