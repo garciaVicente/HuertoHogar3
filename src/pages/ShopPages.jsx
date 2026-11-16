@@ -49,9 +49,120 @@ export function DetailPage({ products, onAdd }) {
   return <div className="container py-5"><Link to="/productos">← Volver al catálogo</Link><div className="row g-5 align-items-center mt-1"><div className="col-md-6"><img className="img-fluid rounded-4 detail-image" src={product.image} alt={product.name} /></div><div className="col-md-6"><small className="text-capitalize text-success">{product.category}</small><h1>{product.name}</h1><p className="lead">{product.description}</p>{product.discount > 0 && <p><span className="badge text-bg-danger">-{product.discount}%</span> <del>{formatPrice(product.price)}</del></p>}<p className="display-6 text-success">{formatPrice(salePrice(product))}</p><p>Stock disponible: {availableStock(product)}</p><button className="btn btn-success btn-lg" disabled={availableStock(product) === 0} onClick={() => onAdd(product)}>{availableStock(product) === 0 ? 'Agotado' : 'Agregar al carrito'}</button></div></div></div>;
 }
 
+
 export function CartPage({ cart, products = cart, onChange, onRemove, onClear }) {
-  return <div className="container py-5"><h1>Tu carrito</h1>{cart.length === 0 ? <div className="py-5"><p>Tu carrito está vacío.</p><Link className="btn btn-success" to="/productos">Ver productos</Link></div> : <>
-    <p className="small text-muted">Máximo 20 unidades por producto y siempre sujeto al stock disponible.</p><div className="table-responsive"><table className="table align-middle"><thead><tr><th scope="col">Producto</th><th scope="col">Precio</th><th scope="col">Cantidad</th><th scope="col">Subtotal</th><th scope="col">Acción</th></tr></thead><tbody>{cart.map(item => <tr key={item.id}><td>{item.name}</td><td>{formatPrice(item.price)}</td><td><div className="d-flex align-items-center gap-2"><button className="btn btn-outline-secondary btn-sm" aria-label={`Reducir ${item.name}`} onClick={() => onChange(item.id, -1)}>−</button><span>{item.quantity}</span><button className="btn btn-outline-secondary btn-sm" aria-label={`Aumentar ${item.name}`} disabled={item.quantity >= cartLimit(products.find(product => product.id === item.id) || item)} onClick={() => onChange(item.id, 1)}>+</button></div></td><td>{formatPrice(item.price * item.quantity)}</td><td><button className="btn btn-link text-danger" onClick={() => onRemove(item.id)}>Eliminar</button></td></tr>)}</tbody></table></div>
-    <div className="text-end"><h2 className="h4">Total: {formatPrice(cartTotal(cart))}</h2><button className="btn btn-outline-danger me-2" onClick={onClear}>Vaciar carrito</button><Link className="btn btn-success" to="/checkout">Continuar compra →</Link><p className="text-muted mt-3 small">Checkout y pago simulados. No se cobran tarjetas.</p></div></>}
-  </div>;
+  const total = cartTotal(cart);
+  const neto = Math.round(total / 1.19);
+  const iva = total - neto;
+
+  return (
+    <div className="container py-5">
+      <h1>Tu carrito</h1>
+
+      {cart.length === 0 ? (
+        <div className="py-5">
+          <p>Tu carrito está vacío.</p>
+          <Link className="btn btn-success" to="/productos">
+            Ver productos
+          </Link>
+        </div>
+      ) : (
+        <>
+          <p className="small text-muted">
+            Sujeto al stock disponible.
+          </p>
+
+          <div className="table-responsive">
+            <table className="table align-middle">
+              <thead>
+                <tr>
+                  <th>Producto</th>
+                  <th>Precio</th>
+                  <th>Cantidad</th>
+                  <th>Subtotal</th>
+                  <th>Acción</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {cart.map(item => (
+                  <tr key={item.id}>
+                    <td>{item.name}</td>
+                    <td>{formatPrice(item.price)}</td>
+                    <td>
+                      <div className="d-flex align-items-center gap-2">
+                        <button
+                          className="btn btn-outline-secondary btn-sm"
+                          aria-label={`Reducir ${item.name}`}
+                          onClick={() => onChange(item.id, -1)}
+                        >
+                          −
+                        </button>
+
+                        <span>{item.quantity}</span>
+
+                        <button
+                          className="btn btn-outline-secondary btn-sm"
+                          aria-label={`Aumentar ${item.name}`}
+                          disabled={
+                            item.quantity >= cartLimit(
+                              products.find(product => product.id === item.id) || item
+                            )
+                          }
+                          onClick={() => onChange(item.id, 1)}
+                        >
+                          +
+                        </button>
+                      </div>
+                    </td>
+
+                    <td>{formatPrice(item.price * item.quantity)}</td>
+
+                    <td>
+                      <button
+                        className="btn btn-link text-danger"
+                        onClick={() => onRemove(item.id)}
+                      >
+                        Eliminar
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <div className="text-end">
+            <p className="mb-1">
+              Valor neto: {formatPrice(neto)}
+            </p>
+
+            <p className="mb-1">
+              IVA (19%): {formatPrice(iva)}
+            </p>
+
+            <h2 className="h4 mt-2">
+              Total: {formatPrice(total)}
+            </h2>
+
+            <button
+              className="btn btn-outline-danger me-2"
+              onClick={onClear}
+            >
+              Vaciar carrito
+            </button>
+
+            <Link className="btn btn-success" to="/checkout">
+              Continuar compra →
+            </Link>
+
+            <p className="text-muted mt-3 small">
+              Checkout y pago simulados. No se cobran tarjetas.
+            </p>
+          </div>
+        </>
+      )}
+    </div>
+  );
 }
+
